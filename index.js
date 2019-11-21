@@ -751,7 +751,7 @@
         this._options = options || {};
         this._styles = this._options['styles'] || [];
         /** @type {number | undefined} */
-        this._zIndex = this.options['zIndex']
+        this._zIndex = this.options['zIndex'];
         (!this._styles.length) && this._setupDefaultStyles();                  
     };
 
@@ -904,7 +904,7 @@
 
         var csstext = [];
         if (this._zIndex) {
-            csstext.push('z-index:' + this._zIndex + ';')
+            csstext.push('z-index:' + this._zIndex + ';');
         }
         if (T.browser["ie"] < 7) {
             csstext.push('filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(' +
