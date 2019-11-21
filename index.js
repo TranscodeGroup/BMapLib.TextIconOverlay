@@ -751,7 +751,7 @@
         this._options = options || {};
         this._styles = this._options['styles'] || [];
         /** @type {number | undefined} */
-        this._zIndex = this.options['zIndex'];
+        this._zIndex = this._options['zIndex'];
         (!this._styles.length) && this._setupDefaultStyles();                  
     };
 
