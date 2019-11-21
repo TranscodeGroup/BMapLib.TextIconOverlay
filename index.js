@@ -720,19 +720,24 @@
     /**
     * TextIconOverlay
     * @class 此类表示地图上的一个覆盖物，该覆盖物由文字和图标组成，从Overlay继承。文字通常是数字（0-9）或字母（A-Z ），而文字与图标之间有一定的映射关系。
-    *该覆盖物适用于以下类似的场景：需要在地图上添加一系列覆盖物，这些覆盖物之间用不同的图标和文字来区分，文字可能表示了该覆盖物的某一属性值，根据该文字和一定的映射关系，自动匹配相应颜色和大小的图标。
+    * 该覆盖物适用于以下类似的场景：需要在地图上添加一系列覆盖物，这些覆盖物之间用不同的图标和文字来区分，文字可能表示了该覆盖物的某一属性值，根据该文字和一定的映射关系，自动匹配相应颜色和大小的图标。
     *
-    *@constructor
-    *@param {Point} position 表示一个经纬度坐标位置。
-    *@param {String} text 表示该覆盖物显示的文字信息。
-    *@param {Json Object} options 可选参数，可选项包括：<br />
-    *"<b>styles</b>":{Array<IconStyle>} 一组图标风格。单个图表风格包括以下几个属性：<br />
-    *   url	{String}	 图片的url地址。(必选)<br />
-    *   size {Size}	图片的大小。（必选）<br />
-    *   anchor {Size} 图标定位在地图上的位置相对于图标左上角的偏移值，默认偏移值为图标的中心位置。（可选）<br />
-    *   offset {Size} 图片相对于可视区域的偏移值，此功能的作用等同于CSS中的background-position属性。（可选）<br />
-    *   textSize {Number} 文字的大小。（可选，默认10）<br />
-    *   textColor {String} 文字的颜色。（可选，默认black）<br />
+    * @constructor
+    * @param {Point} position 表示一个经纬度坐标位置。
+    * @param {string} text 表示该覆盖物显示的文字信息。
+    * @param {TextIconOverlayOptions=} options 选项。
+    *
+    * @typedef {object} TextIconOverlayOptions
+    * @property {IconStyle[]=} styles 一组图标风格。
+    * @property {number=} zIndex 等同与CSS中的z-index属性
+    * 
+    * @typedef {object} IconStyle
+    * @property {string} url 图片的url地址。
+    * @property {Size} size 图片的大小。
+    * @property {Size=} anchor 图标定位在地图上的位置相对于图标左上角的偏移值，默认偏移值为图标的中心位置。
+    * @property {Size=} offset 图片相对于可视区域的偏移值，此功能的作用等同于CSS中的background-position属性。
+    * @property {number=} [textSize=10] 文字的大小。
+    * @property {string} [textColor='black'] 文字的颜色。
     */
     var TextIconOverlay = function(position, text, options){
         try {
@@ -745,6 +750,8 @@
         this._text = text;
         this._options = options || {};
         this._styles = this._options['styles'] || [];
+        /** @type {number | undefined} */
+        this._zIndex = this.options['zIndex']
         (!this._styles.length) && this._setupDefaultStyles();                  
     };
 
@@ -896,6 +903,9 @@
         var textSize = style['textSize'] || 10;
 
         var csstext = [];
+        if (this._zIndex) {
+            csstext.push('z-index:' + this._zIndex + ';')
+        }
         if (T.browser["ie"] < 7) {
             csstext.push('filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(' +
                 'sizingMethod=scale,src="' + url + '");');
